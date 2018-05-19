@@ -1,0 +1,39 @@
+#!/bin/bash
+
+searchstring=$1
+
+if [ -z $searchstring ]
+    then
+    echo "umout x - by milmike.com"
+    echo "Unmouts a mout by a partial name of the mount name."
+    echo "Example: umoutx mountname"
+    exit 5
+fi
+
+
+#Find the mount point by string:
+mountpoint=`mount | grep -m 1 -i $searchstring | cut -d' ' -f 1`
+#mountpoint="$(echo -e "${mountpoint}" | sed -e 's/[[:space:]]*$//')"
+
+
+if [ -z $mountpoint ]
+    then
+    echo "Mountpoint with that name was not found."
+    exit 1
+fi
+
+echo $mountpoint
+
+echo "Do you want to unmout this? (Y/n)"
+read doit
+echo "DOIT=$doit"
+
+
+if [ "$doit" == "n" ]
+    then
+    exit 0
+fi
+
+echo "Unmounting..."
+
+sudo umount $mountpoint
